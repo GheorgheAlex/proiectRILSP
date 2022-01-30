@@ -33,9 +33,6 @@ def citireSenzorLuminaAmbientala():
         print("Initializare senzor...")
     else:
         lightValue = temt6000_value * 1000
-        print("Lumina ambientala: ")
-        print(lightValue)
-        print(" ")
         return lightValue
 
     time.sleep(0.1)
