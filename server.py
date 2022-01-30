@@ -152,25 +152,13 @@ def threaded_client(connection):
                         connection.send(str.encode(str(gasData)))
                         time.sleep(1)
 
-                
                 ### MOD DE ALERTA ###
-                if(int(controlCommand) == 4):
-
-                    # Se citesc datele de la senzori:
-                    vibrationData = citireSenzorVibratii()
-                    lightData = citireSenzorLuminaAmbientala()
-                    gasData = citireSenzorGaze()
-
-                    # Se fac alertele:
-                    if(lightData < 2):
-                        connection.send(str.encode('Alerta lumina'))
-
-                # MOD DE ALERTA
                 if (int(controlCommand) == 4):
                     print('Cerere: sunt in modul de alerta')
                     measurementTime = connection.recv(2048)
-                    print('Sunt in modul de alerta pentru: ', int(measurementTime), 'secunde.')
-                    for _ in range(int(measurementTime)):
+                    workTime = int(measurementTime) * 60
+                    print('Sunt in modul de alerta pentru: ', workTime, 'minute.')
+                    for _ in range(workTime):
                         vibrationData = citireSenzorVibratii()
                         lightData = citireSenzorLuminaAmbientala()
                         gasData = citireSenzorGaze()

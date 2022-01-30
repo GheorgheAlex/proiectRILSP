@@ -104,7 +104,7 @@ if (response == 'Conexiune reusita!'):
         
         if (serverCommand == '4'):
             print('Mod de alerta.')
-            print('Cat timp sa fie activ modul de alerta: ')
+            print('Cat timp sa fie activ modul de alerta (minute): ')
             serverCommand = input()
             client.send(str.encode(serverCommand))
             for _ in range(int(serverCommand)):
