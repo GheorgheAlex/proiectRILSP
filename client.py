@@ -28,43 +28,11 @@ print(str(response))
 
 # Selectare mod de operare al clientului
 if (response == 'Conexiune reusita!'):
-    print('Mod de operare: ')
-    print('8 - Mod de alerta ')
-    print('9 - Mod de masurare ')
-
-serverCommand = input()
-client.send(str.encode(serverCommand))
-
-# MOD DE ALERTA
-
-if (serverCommand == '0'):
-    print('Mod de alerta.')
-    print('Apasa 0 si Enter pentru a opri clientul')
-
-    while True:
-        serverCommand = input()
-        client.send(str.encode(serverCommand))
-
-        response = client.recv(2048)
-        response = response.decode()
-        print(str(response))
-
-
-        if(serverCommand == '0'):
-            break
-
-
-
-
-# MOD DE MASURARE
-if (serverCommand == '9'):
     print('Meniu mod de masurare: ')
     print('1 - Cere date de lumina ambientala')
     print('2 - Masurare vibratii')
     print('3 - Masurare nivel gaz')
     print('0 - Incheiere conexiune')
-
-
 
     while True:
         commandList = [0, 1, 2, 3]
@@ -75,8 +43,6 @@ if (serverCommand == '9'):
 
         if (int(serverCommand) != commandList):
             print("Comanda nu este permisa!")
-
-        # TODO: Sa creez doua moduri de lucru: unul de monitorizare, si unul de alerta
 
         # Masurare temperatura
         if (serverCommand == '1'):
@@ -123,7 +89,7 @@ if (serverCommand == '9'):
             print('Sarcina incheiata cu succes!')
 
         # Masurare gaz
-        if (serverCommand == '2'):
+        if (serverCommand == '3'):
             print('Cat timp: ')
             serverCommand = input()
             client.send(str.encode(serverCommand))
@@ -134,6 +100,19 @@ if (serverCommand == '9'):
                 print(float(response))
                 time.sleep(1)
             print('Sarcina incheiata cu succes!')
+
+        
+        if (serverCommand == '4'):
+            print('Mod de alerta.')
+            print('Cat timp sa fie activ modul de alerta: ')
+            serverCommand = input()
+            client.send(str.encode(serverCommand))
+            for _ in range(int(serverCommand)):
+                response = client.recv(2048)
+                response = response.decode()
+                print(str(response))
+            print('Sarcina incheiata cu succes!')
+
         if (serverCommand == '0'):
             break
 else:

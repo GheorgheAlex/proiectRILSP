@@ -57,9 +57,6 @@ def citireSenzorGaze():
         return mq2_value
 
 
-
-
-
 # CREARE CONEXIUNE TCP
 ServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
 host = '127.0.0.1'
@@ -104,26 +101,11 @@ def threaded_client(connection):
 
             # FUNCTIONALITATE
             while True:
+                # Se asteapta comanda pentru a alege modul de functionare
                 controlCommand = connection.recv(2048)
                 print('controlCommand :', controlCommand)
 
-                # MOD DE ALERTA
-
-                if(int(controlCommand) == 8):
-
-                    vibrationData = citireSenzorVibratii()
-                    lightData = citireSenzorLuminaAmbientala()
-                    gasData = citireSenzorGaze()
-
-                    if(lightData < 2):
-                        connection.send(str.encode('Alerta lumina'))
-
-
-
-
-
-                # MOD DE MONITORIZARE
-                # TODO: Cum as putea sa fac din bucatile de mai jos un mod de monitorizare
+                ### MOD DE MASURARE: ###
 
                 # CITIRE DATE LUMINA AMBIENTALA:
                 if (int(controlCommand) == 1):
@@ -170,9 +152,47 @@ def threaded_client(connection):
                         connection.send(str.encode(str(gasData)))
                         time.sleep(1)
 
-                # TODO: Cum as putea implementa un mod de alerta?
+                
+                ### MOD DE ALERTA ###
+                if(int(controlCommand) == 4):
 
-                # TODO: Serverul sa dea alertele
+                    # Se citesc datele de la senzori:
+                    vibrationData = citireSenzorVibratii()
+                    lightData = citireSenzorLuminaAmbientala()
+                    gasData = citireSenzorGaze()
+
+                    # Se fac alertele:
+                    if(lightData < 2):
+                        connection.send(str.encode('Alerta lumina'))
+
+                # MOD DE ALERTA
+                if (int(controlCommand) == 4):
+                    print('Cerere: sunt in modul de alerta')
+                    measurementTime = connection.recv(2048)
+                    print('Sunt in modul de alerta pentru: ', int(measurementTime), 'secunde.')
+                    for _ in range(int(measurementTime)):
+                        vibrationData = citireSenzorVibratii()
+                        lightData = citireSenzorLuminaAmbientala()
+                        gasData = citireSenzorGaze()
+
+                        # Creare alerte vibratii:
+                        if (vibrationData >= 10):
+                             connection.send(str.encode('Vibratii puternice detectate'))
+                             time.sleep(1)
+
+                        # Creare alerte lumina:
+
+                        if(lightData < 2):
+                            connection.send(str.encode('Lumina slaba detectata!'))
+                            time.sleep(1)
+                        
+                        if(lightData > 600):
+                            connection.send(str.encode('Lumina puternica detectata!'))
+                            time.sleep(1)
+
+                        if(gasData > 10):
+                            connection.send(str.encode('Gaz inflamabil detectat!'))
+                            time.sleep(1)
 
                 elif (int(controlCommand) == 0):
                     command0 = 'Conexiune incheiata'
