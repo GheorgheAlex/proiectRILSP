@@ -30,7 +30,7 @@ gasSensor_input = board.get_pin('a:2:i')
 def citireSenzorLuminaAmbientala():
     temt6000_value = temt6000_input.read()
     if (temt6000_value == None):
-        print("Initializare senzor...")
+        return 0
     else:
         lightValue = temt6000_value * 1000
         return lightValue
@@ -41,7 +41,7 @@ def citireSenzorLuminaAmbientala():
 def citireSenzorVibratii():
     piezo_value = vibrationSensor_input.read()
     if (piezo_value == None):
-        print("Initializare senzor...")
+        return 0
     else:
         return piezo_value
 
@@ -49,7 +49,7 @@ def citireSenzorVibratii():
 def citireSenzorGaze():
     mq2_value = gasSensor_input.read()
     if (mq2_value == None):
-        print("Initializare senzor...")
+        return 0
     else:
         return mq2_value
 
@@ -154,7 +154,7 @@ def threaded_client(connection):
                     print('Cerere: sunt in modul de alerta')
                     measurementTime = connection.recv(2048)
                     workTime = int(measurementTime) * 60
-                    print('Sunt in modul de alerta pentru: ', workTime, 'minute.')
+                    print('Sunt in modul de alerta pentru: ', measurementTime, 'minute.')
                     for _ in range(workTime):
                         vibrationData = citireSenzorVibratii()
                         lightData = citireSenzorLuminaAmbientala()
@@ -167,7 +167,7 @@ def threaded_client(connection):
 
                         # Creare alerte lumina:
 
-                        if(lightData < 2):
+                        if(lightData < 10):
                             connection.send(str.encode('Lumina slaba detectata!'))
                             time.sleep(1)
                         

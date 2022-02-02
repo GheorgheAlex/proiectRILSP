@@ -28,21 +28,22 @@ print(str(response))
 
 # Selectare mod de operare al clientului
 if (response == 'Conexiune reusita!'):
-    print('Meniu mod de masurare: ')
-    print('1 - Cere date de lumina ambientala')
-    print('2 - Masurare vibratii')
-    print('3 - Masurare nivel gaz')
-    print('0 - Incheiere conexiune')
 
     while True:
-        commandList = [0, 1, 2, 3]
+
+        print('')
+        print('Meniu mod de masurare: ')
+        print('1 - Cere date de lumina ambientala')
+        print('2 - Masurare vibratii')
+        print('3 - Masurare nivel gaz')
+        print('0 - Incheiere conexiune')
+        print('')
+
 
         print("Comanda: ")
         serverCommand = input()
         client.send(str.encode(serverCommand))
 
-        if (int(serverCommand) != commandList):
-            print("Comanda nu este permisa!")
 
         # Masurare temperatura
         if (serverCommand == '1'):
@@ -53,12 +54,9 @@ if (response == 'Conexiune reusita!'):
             serverCommand = input()
             client.send(str.encode(serverCommand))
 
-            # if(int(serverCommand) != [11, 12]):
-            #     print("Comanda nu exista!")
-
             if (int(serverCommand) == 11):
                 response = client.recv(2048)
-                print(str(response))
+                print(str(response)) 
                 response = client.recv(2048)
                 print(float(response))
 
@@ -82,8 +80,6 @@ if (response == 'Conexiune reusita!'):
             for _ in range(int(serverCommand)):
                 response = client.recv(2048)
                 print("Vibratie: ")
-                # TODO: de vazut cum se realizeaza masuratorile
-                # TODO: Cum as putea sa imi fac un sistem de alerta la vibratie?
                 print(float(response))
                 time.sleep(1)
             print('Sarcina incheiata cu succes!')
@@ -96,12 +92,12 @@ if (response == 'Conexiune reusita!'):
             for _ in range(int(serverCommand)):
                 response = client.recv(2048)
                 print("Gaz: ")
-                # TODO: sa fac un sistem de alerta care zice daca este gaz prezent sau nu. Pentru asta ar trebui sa verific pragurile de tensiune si apoi sa fac alertele
                 print(float(response))
                 time.sleep(1)
             print('Sarcina incheiata cu succes!')
 
-        
+
+        ### MOD DE ALERTA ###
         if (serverCommand == '4'):
             print('Mod de alerta.')
             print('Cat timp sa fie activ modul de alerta (minute): ')
