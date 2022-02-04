@@ -1,4 +1,4 @@
-# PROIECT: Aplicatie de monitorizare a exploziilor
+# PROIECT: Sistem de monitorizarea a parametrilor unei hale industriale
 # REALIZAT DE: Alexandru-Marius GHEORGHE
 
 
@@ -35,8 +35,6 @@ def citireSenzorLuminaAmbientala():
         lightValue = temt6000_value * 1000
         return lightValue
 
-    time.sleep(0.1)
-
 # FUNCTIE MASURARE SENZOR DE VIBRATII
 def citireSenzorVibratii():
     piezo_value = vibrationSensor_input.read()
@@ -52,7 +50,6 @@ def citireSenzorGaze():
         return 0
     else:
         return mq2_value
-
 
 # CREARE CONEXIUNE TCP
 ServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
@@ -102,11 +99,9 @@ def threaded_client(connection):
                 controlCommand = connection.recv(2048)
                 print('controlCommand :', controlCommand)
 
-                ### MOD DE MASURARE: ###
-
                 # CITIRE DATE LUMINA AMBIENTALA:
                 if (int(controlCommand) == 1):
-                    print('Cerere date : seznzor TEMT6000')
+                    print('Cerere date : senzor TEMT6000')
                     print('Astept subcomanda...')
                     subCommand = connection.recv(2048)
                     print(subCommand)
@@ -149,36 +144,6 @@ def threaded_client(connection):
                         connection.send(str.encode(str(gasData)))
                         time.sleep(1)
 
-                ### MOD DE ALERTA ###
-                if (int(controlCommand) == 4):
-                    print('Cerere: sunt in modul de alerta')
-                    measurementTime = connection.recv(2048)
-                    workTime = int(measurementTime) * 60
-                    print('Sunt in modul de alerta pentru: ', measurementTime, 'minute.')
-                    for _ in range(workTime):
-                        vibrationData = citireSenzorVibratii()
-                        lightData = citireSenzorLuminaAmbientala()
-                        gasData = citireSenzorGaze()
-
-                        # Creare alerte vibratii:
-                        if (vibrationData >= 10):
-                             connection.send(str.encode('Vibratii puternice detectate'))
-                             time.sleep(1)
-
-                        # Creare alerte lumina:
-
-                        if(lightData < 10):
-                            connection.send(str.encode('Lumina slaba detectata!'))
-                            time.sleep(1)
-                        
-                        if(lightData > 600):
-                            connection.send(str.encode('Lumina puternica detectata!'))
-                            time.sleep(1)
-
-                        if(gasData > 10):
-                            connection.send(str.encode('Gaz inflamabil detectat!'))
-                            time.sleep(1)
-
                 elif (int(controlCommand) == 0):
                     command0 = 'Conexiune incheiata'
                     print('Commanda :', command0)
@@ -186,7 +151,7 @@ def threaded_client(connection):
                     break
 
         else:
-            connection.send(str.encode('Login esuat'))  # Response code for login failed
+            connection.send(str.encode('Login esuat'))  # Raspuns pentru login esuat
             print('Conexiune nepermisa : ', name)
     while True:
         break
@@ -201,4 +166,5 @@ while True:
     client_handler.start()
     ThreadCount += 1
     print('Cerere conexiune ' + str(ThreadCount))
+    
 ServerSocket.close()
