@@ -1,6 +1,5 @@
-# PROIECT: Aplicatie de monitorizare a exploziilor
+# PROIECT: Sistem de monitorizarea a parametrilor unei hale industriale
 # REALIZAT DE: Alexandru-Marius GHEORGHE
-
 
 import socket
 import time
@@ -94,19 +93,6 @@ if (response == 'Conexiune reusita!'):
                 print("Gaz: ")
                 print(float(response))
                 time.sleep(1)
-            print('Sarcina incheiata cu succes!')
-
-
-        ### MOD DE ALERTA ###
-        if (serverCommand == '4'):
-            print('Mod de alerta.')
-            print('Cat timp sa fie activ modul de alerta (minute): ')
-            serverCommand = input()
-            client.send(str.encode(serverCommand))
-            for _ in range(int(serverCommand)):
-                response = client.recv(2048)
-                response = response.decode()
-                print(str(response))
             print('Sarcina incheiata cu succes!')
 
         if (serverCommand == '0'):
