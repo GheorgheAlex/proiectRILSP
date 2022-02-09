@@ -78,8 +78,9 @@ if (response == 'Conexiune reusita!'):
             client.send(str.encode(serverCommand))
             for _ in range(int(serverCommand)):
                 response = client.recv(2048)
-                print("Vibratie: ")
-                print(float(response))
+                # print("Vibratie: ")
+                # print(float(response))
+                print(response)
                 time.sleep(1)
             print('Sarcina incheiata cu succes!')
 

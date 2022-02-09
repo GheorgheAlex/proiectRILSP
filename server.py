@@ -41,7 +41,11 @@ def citireSenzorVibratii():
     if (piezo_value == None):
         return 0
     else:
-        return piezo_value
+        if(piezo_value > 0.1):
+            return "Soc mecanic detectat"
+        else:
+            if(piezo_value < 0.1):
+                return "NU s-au detectat vibratii"
 
 # FUNCTIE MASURARE DATE SENZOR DE GAZ MQ2
 def citireSenzorGaze():
@@ -55,12 +59,6 @@ def citireSenzorGaze():
             if(mq2_value >= 0.18):
                 return "Gaz detectat!"
 
-def citireSenzorGaze1():
-    mq2_value = gasSensor_input.read()
-    if (mq2_value == None):
-        return 0
-    else:
-        return mq2_value
 
 # CREARE CONEXIUNE TCP
 ServerSocket = socket.socket(family=socket.AF_INET, type=socket.SOCK_STREAM)
