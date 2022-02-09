@@ -49,6 +49,17 @@ def citireSenzorGaze():
     if (mq2_value == None):
         return 0
     else:
+        if(mq2_value < 0.18):
+            return "Nu s-a detectat gaz"
+        else:
+            if(mq2_value >= 0.18):
+                return "Gaz detectat!"
+
+def citireSenzorGaze1():
+    mq2_value = gasSensor_input.read()
+    if (mq2_value == None):
+        return 0
+    else:
         return mq2_value
 
 # CREARE CONEXIUNE TCP
